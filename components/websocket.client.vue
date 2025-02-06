@@ -1,20 +1,68 @@
 <script lang="ts" setup>
+  import { validate } from 'uuid';
+  import type { z } from 'zod';
+  import { clientVoteEventsZod } from '~/shared/client-vote-events.zod';
+  import type { serverVoteEventsZod } from '~/shared/server-vote-events.zod';
+
+  const { roomId } = defineProps({
+    roomId: { type: String, required: true },
+  });
+
+  // protect route
+  const isUuid = validate(roomId);
+  if (!isUuid) {
+    await navigateTo('/');
+  }
+
+  // Get relevant variables
   const location = useBrowserLocation();
   const isSecure = location.value.protocol === 'https:';
   const host = location.value.host;
-  const url = `${isSecure ? 'wss://' : 'ws://'}${host}/_ws`;
+
+  // Generate Url
+  const url = `${
+    isSecure ? 'wss://' : 'ws://'
+  }${host}/ws/vote?room-id=${roomId}`;
+
+  const users = ref<string[]>();
+
+  // Connect Websocket
   const { status, data, send } = useWebSocket(url);
-  const history = ref<string[]>([]);
   watch(data, async () => {
-    const text = await data.value.text();
-    console.log(text);
-    history.value.push(JSON.parse(text).message);
+    if (!data.value) {
+      return;
+    }
+    console.log(JSON.parse(await data.value.text()));
+    const message = clientVoteEventsZod.parse(
+      JSON.parse(await data.value.text())
+    );
+    if (message.event === 'room-data') {
+      const usersArray = Array.from(message.data.users.values());
+      users.value = usersArray;
+    }
   });
+
+  const nameRef = ref('');
+
+  function handleChangeName() {
+    const message: z.infer<typeof serverVoteEventsZod> = {
+      event: 'update-name',
+      data: {
+        name: nameRef.value,
+      },
+    };
+    send(JSON.stringify(message));
+  }
 </script>
 
 <template>
-  <div>{{ status }}</div>
-
-  <div v-for="message in history">{{ message }}</div>
-  <button v-on:click="send('Hello World')">test</button>
+  <div>
+    <div>{{ status }}</div>
+    <div v-for="user of users">{{ user }}</div>
+    <input
+      type="text"
+      v-model="nameRef"
+    />
+    <button @click="handleChangeName">Update Name</button>
+  </div>
 </template>
