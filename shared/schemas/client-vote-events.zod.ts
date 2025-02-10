@@ -5,12 +5,17 @@ import { eventLiteralZod } from '~/shared/schemas/vote-events.config';
 
 export const clientVoteEventsZod = z.discriminatedUnion('event', [
   z.object({
-    event: eventLiteralZod('join-room'),
+    event: eventLiteralZod('self-join-room'),
     data: z.object({
-      name: nameZod,
       users: nameZod.array(),
       suggestions: suggestionZod.array(),
       vote: suggestionZod.optional(),
+    }),
+  }),
+  z.object({
+    event: eventLiteralZod('other-join-room'),
+    data: z.object({
+      users: nameZod.array(),
     }),
   }),
   z.object({

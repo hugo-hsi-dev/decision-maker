@@ -25,6 +25,7 @@ export default defineWebSocketHandler({
     try {
       const roomId = roomIdFromUrl(url);
       const name = nameFromUrl(url);
+      console.log(name);
       peer.subscribe(roomId);
 
       const roomExists = rooms.has(roomId);
@@ -39,24 +40,35 @@ export default defineWebSocketHandler({
       const roomData = rooms.get(roomId)!;
 
       roomData.users.set(peer.id, name);
-      console.log(roomData.users);
+      console.log(roomData.users, peer.id);
 
       const vote = roomData.votes.get(peer.id);
 
       const users = usersWithoutSelf(roomData.users, peer.id);
 
+      const suggestions = arrayFromSet(roomData.suggestions);
+
       const response: z.infer<typeof clientVoteEventsZod> = {
-        event: 'join-room',
+        event: 'self-join-room',
         data: {
-          name: roomData.users.get(peer.id) ?? 'Anonymous',
           users,
-          suggestions: arrayFromSet(roomData.suggestions),
+          suggestions,
           vote,
         },
       };
 
       peer.send(response);
-      peer.publish(roomId, response);
+
+      peer.peers.forEach((peer) => {
+        const users = usersWithoutSelf(roomData.users, peer.id);
+        const response: z.infer<typeof clientVoteEventsZod> = {
+          event: 'other-join-room',
+          data: {
+            users,
+          },
+        };
+        peer.send(response);
+      });
     } catch (err) {
       console.error(err);
     }

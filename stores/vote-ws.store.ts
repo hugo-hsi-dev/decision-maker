@@ -52,10 +52,13 @@ export const useVoteWsStore = defineStore('vote-ws', () => {
       }
       const { event, data: messageData } = message.data;
 
-      if (event === 'join-room') {
-        name.value = messageData.name;
+      if (event === 'self-join-room') {
         users.value = messageData.users;
         suggestions.value = messageData.suggestions;
+      }
+
+      if (event === 'other-join-room') {
+        users.value = messageData.users;
       }
 
       if (event === 'update-name') {

@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const voteEventsConfig = [
-  'join-room',
+  'self-join-room',
+  'other-join-room',
   'leave-room',
   'update-name',
   'add-suggestion',
