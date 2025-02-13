@@ -1,27 +1,49 @@
 {
-  "name": "nuxt-app",
+  "name": "tanstack-start-example-basic-react-query",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "start": "node .output/server/index.mjs"
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start"
   },
   "dependencies": {
-    "@formkit/auto-animate": "^0.8.2",
-    "@nuxt/ui": "2.21.0",
-    "@pinia/nuxt": "0.9.0",
-    "@vueuse/core": "^12.4.0",
-    "@vueuse/nuxt": "12.4.0",
-    "nuxt": "^3.15.4",
-    "pinia": "^2.3.0",
-    "uuid": "^11.0.5",
-    "vue": "latest",
-    "vue-router": "latest",
-    "zod": "^3.24.1"
+    "@hookform/resolvers": "4.0.0",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@tailwindcss/postcss": "^4.0.6",
+    "@tanstack/react-query": "^5.66.0",
+    "@tanstack/react-query-devtools": "^5.66.0",
+    "@tanstack/react-router": "^1.102.5",
+    "@tanstack/react-router-with-query": "^1.102.5",
+    "@tanstack/router-devtools": "^1.102.5",
+    "@tanstack/start": "^1.103.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "ioredis": "^5.5.0",
+    "lucide-react": "^0.475.0",
+    "postcss": "^8.5.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "7.54.2",
+    "react-use-websocket": "4.13.0",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss": "^4.0.6",
+    "tailwindcss-animate": "^1.0.7",
+    "unstorage": "^1.14.4",
+    "usehooks-ts": "^3.1.1",
+    "vinxi": "0.5.3",
+    "zod": "3.23.8",
+    "zustand": "^5.0.3"
   },
-  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "autoprefixer": "^10.4.20",
+    "babel-plugin-react-compiler": "19.0.0-beta-30d8a17-20250209",
+    "typescript": "^5.7.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
 }
