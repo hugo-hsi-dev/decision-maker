@@ -8,7 +8,10 @@
 		"build": "vinxi build",
 		"start": "vinxi start",
 		"format:check": "biome check . && eslint .",
-		"format": "biome check --write --unsafe . && eslint --fix ."
+		"format": "biome check --write --unsafe . && eslint --fix .",
+		"db:push": "drizzle-kit push",
+		"db:studio": "drizzle-kit studio",
+		"auth:generate": "pnpm dlx @better-auth/cli@latest generate --output=./app/features/auth/lib/schemas.ts --config=./app/features/auth/lib/auth.ts"
 	},
 	"dependencies": {
 		"@radix-ui/react-slot": "^1.1.2",
@@ -19,9 +22,12 @@
 		"@tanstack/react-router-with-query": "^1.104.1",
 		"@tanstack/router-devtools": "^1.104.3",
 		"@tanstack/start": "^1.104.2",
+		"better-auth": "^1.1.18",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"drizzle-orm": "^0.39.3",
 		"lucide-react": "^0.475.0",
+		"pg": "^8.13.3",
 		"postcss": "^8.5.2",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
@@ -34,8 +40,10 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@types/node": "^22.13.4",
+		"@types/pg": "^8.11.11",
 		"@types/react": "^19.0.8",
 		"@types/react-dom": "^19.0.3",
+		"drizzle-kit": "^0.30.4",
 		"eslint": "^9.20.1",
 		"eslint-config-biome": "^1.9.4",
 		"typescript": "^5.7.3",
