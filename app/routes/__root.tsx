@@ -1,15 +1,15 @@
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary';
 import { NotFound } from '@/components/NotFound';
+import Devtools from '@/components/devtools';
 import { seo } from '@/lib/seo';
 import appCss from '@/styles/app.css?url';
 import type { QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
 	Link,
 	Outlet,
 	createRootRouteWithContext,
 } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+
 import { Meta, Scripts } from '@tanstack/start';
 
 export const Route = createRootRouteWithContext<{
@@ -93,8 +93,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				</div>
 				<hr />
 				{children}
-				<TanStackRouterDevtools position='bottom-right' />
-				<ReactQueryDevtools buttonPosition='bottom-left' />
+				<Devtools />
 				<Scripts />
 			</body>
 		</html>
