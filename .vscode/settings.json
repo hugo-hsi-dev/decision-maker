@@ -1,5 +1,4 @@
 {
-	// start
 	"files.watcherExclude": {
 		"**/routeTree.gen.ts": true
 	},
@@ -9,8 +8,6 @@
 	"files.readonlyInclude": {
 		"**/routeTree.gen.ts": true
 	},
-
-	// biome/eslint
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit",
 		"source.organizeImports.biome": "explicit",
