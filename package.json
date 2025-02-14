@@ -31,5 +31,6 @@
     "typescript": "^5.7.2",
     "vite-tsconfig-paths": "^5.1.4",
     "@types/bun": "latest"
-  }
+  },
+  "module": "index.ts"
 }
