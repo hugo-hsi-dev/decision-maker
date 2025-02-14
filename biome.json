@@ -1,0 +1,49 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": [
+			"node_modules",
+			"pnpm-lock.yaml",
+			".output",
+			".vinxi",
+			"routeTree.gen.ts"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"nursery": {
+				"noEnum": "error",
+				"noExportedImports": "error",
+				"noNestedTernary": "error",
+				"noProcessEnv": "error",
+				"noStaticElementInteractions": "error",
+				"noTemplateCurlyInString": "error",
+				"useAriaPropsSupportedByRole": "error",
+				"useCollapsedIf": "error",
+				"useConsistentCurlyBraces": "error",
+				"useSortedClasses": "warn"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "single"
+		}
+	}
+}
