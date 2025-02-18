@@ -2,15 +2,22 @@ import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary';
 import { NotFound } from '@/components/NotFound';
 import Devtools from '@/components/devtools';
 import { seo } from '@/lib/seo';
-import appCss from '@/styles/app.css?url';
+import {
+	ColorSchemeScript,
+	MantineProvider,
+	mantineHtmlProps,
+} from '@mantine/core';
+// import appCss from '@/styles/app.css?url';
+import appCss from '@mantine/core/styles.css?url';
 import type { QueryClient } from '@tanstack/react-query';
 import {
+	HeadContent,
 	Link,
 	Outlet,
 	createRootRouteWithContext,
 } from '@tanstack/react-router';
 
-import { Meta, Scripts } from '@tanstack/start';
+import { Scripts } from '@tanstack/start';
 
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient;
@@ -75,9 +82,10 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang='en'>
+		<html lang='en' {...mantineHtmlProps}>
 			<head>
-				<Meta />
+				<HeadContent />
+				<ColorSchemeScript />
 			</head>
 			<body>
 				<div className='flex gap-2 p-2 text-lg'>
@@ -92,7 +100,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					</Link>
 				</div>
 				<hr />
-				{children}
+				<MantineProvider>{children}</MantineProvider>
 				<Devtools />
 				<Scripts />
 			</body>
