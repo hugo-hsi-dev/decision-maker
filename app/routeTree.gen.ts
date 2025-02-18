@@ -11,98 +11,185 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LoginImport } from './routes/login'
-import { Route as AppImport } from './routes/app'
-import { Route as IndexImport } from './routes/index'
+import { Route as RequireAuthRouteImport } from './routes/_require-auth/route'
+import { Route as NoAuthRouteImport } from './routes/_no-auth/route'
+import { Route as MaybeAuthIndexImport } from './routes/_maybe-auth/index'
+import { Route as RequireAuthAppRouteImport } from './routes/_require-auth/app/route'
+import { Route as RequireAuthAppIndexImport } from './routes/_require-auth/app/index'
+import { Route as NoAuthSignInIndexImport } from './routes/_no-auth/sign-in/index'
 
 // Create/Update Routes
 
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
+const RequireAuthRouteRoute = RequireAuthRouteImport.update({
+  id: '/_require-auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AppRoute = AppImport.update({
-  id: '/app',
-  path: '/app',
+const NoAuthRouteRoute = NoAuthRouteImport.update({
+  id: '/_no-auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
+const MaybeAuthIndexRoute = MaybeAuthIndexImport.update({
+  id: '/_maybe-auth/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const RequireAuthAppRouteRoute = RequireAuthAppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => RequireAuthRouteRoute,
+} as any)
+
+const RequireAuthAppIndexRoute = RequireAuthAppIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RequireAuthAppRouteRoute,
+} as any)
+
+const NoAuthSignInIndexRoute = NoAuthSignInIndexImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
+  getParentRoute: () => NoAuthRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_no-auth': {
+      id: '/_no-auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof NoAuthRouteImport
       parentRoute: typeof rootRoute
     }
-    '/app': {
-      id: '/app'
+    '/_require-auth': {
+      id: '/_require-auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof RequireAuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/_require-auth/app': {
+      id: '/_require-auth/app'
       path: '/app'
       fullPath: '/app'
-      preLoaderRoute: typeof AppImport
+      preLoaderRoute: typeof RequireAuthAppRouteImport
+      parentRoute: typeof RequireAuthRouteImport
+    }
+    '/_maybe-auth/': {
+      id: '/_maybe-auth/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof MaybeAuthIndexImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
+    '/_no-auth/sign-in/': {
+      id: '/_no-auth/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof NoAuthSignInIndexImport
+      parentRoute: typeof NoAuthRouteImport
+    }
+    '/_require-auth/app/': {
+      id: '/_require-auth/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof RequireAuthAppIndexImport
+      parentRoute: typeof RequireAuthAppRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface NoAuthRouteRouteChildren {
+  NoAuthSignInIndexRoute: typeof NoAuthSignInIndexRoute
+}
+
+const NoAuthRouteRouteChildren: NoAuthRouteRouteChildren = {
+  NoAuthSignInIndexRoute: NoAuthSignInIndexRoute,
+}
+
+const NoAuthRouteRouteWithChildren = NoAuthRouteRoute._addFileChildren(
+  NoAuthRouteRouteChildren,
+)
+
+interface RequireAuthAppRouteRouteChildren {
+  RequireAuthAppIndexRoute: typeof RequireAuthAppIndexRoute
+}
+
+const RequireAuthAppRouteRouteChildren: RequireAuthAppRouteRouteChildren = {
+  RequireAuthAppIndexRoute: RequireAuthAppIndexRoute,
+}
+
+const RequireAuthAppRouteRouteWithChildren =
+  RequireAuthAppRouteRoute._addFileChildren(RequireAuthAppRouteRouteChildren)
+
+interface RequireAuthRouteRouteChildren {
+  RequireAuthAppRouteRoute: typeof RequireAuthAppRouteRouteWithChildren
+}
+
+const RequireAuthRouteRouteChildren: RequireAuthRouteRouteChildren = {
+  RequireAuthAppRouteRoute: RequireAuthAppRouteRouteWithChildren,
+}
+
+const RequireAuthRouteRouteWithChildren =
+  RequireAuthRouteRoute._addFileChildren(RequireAuthRouteRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/app': typeof AppRoute
-  '/login': typeof LoginRoute
+  '': typeof RequireAuthRouteRouteWithChildren
+  '/app': typeof RequireAuthAppRouteRouteWithChildren
+  '/': typeof MaybeAuthIndexRoute
+  '/sign-in': typeof NoAuthSignInIndexRoute
+  '/app/': typeof RequireAuthAppIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/app': typeof AppRoute
-  '/login': typeof LoginRoute
+  '': typeof RequireAuthRouteRouteWithChildren
+  '/': typeof MaybeAuthIndexRoute
+  '/sign-in': typeof NoAuthSignInIndexRoute
+  '/app': typeof RequireAuthAppIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/app': typeof AppRoute
-  '/login': typeof LoginRoute
+  '/_no-auth': typeof NoAuthRouteRouteWithChildren
+  '/_require-auth': typeof RequireAuthRouteRouteWithChildren
+  '/_require-auth/app': typeof RequireAuthAppRouteRouteWithChildren
+  '/_maybe-auth/': typeof MaybeAuthIndexRoute
+  '/_no-auth/sign-in/': typeof NoAuthSignInIndexRoute
+  '/_require-auth/app/': typeof RequireAuthAppIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/login'
+  fullPaths: '' | '/app' | '/' | '/sign-in' | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/login'
-  id: '__root__' | '/' | '/app' | '/login'
+  to: '' | '/' | '/sign-in' | '/app'
+  id:
+    | '__root__'
+    | '/_no-auth'
+    | '/_require-auth'
+    | '/_require-auth/app'
+    | '/_maybe-auth/'
+    | '/_no-auth/sign-in/'
+    | '/_require-auth/app/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRoute
-  LoginRoute: typeof LoginRoute
+  NoAuthRouteRoute: typeof NoAuthRouteRouteWithChildren
+  RequireAuthRouteRoute: typeof RequireAuthRouteRouteWithChildren
+  MaybeAuthIndexRoute: typeof MaybeAuthIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AppRoute: AppRoute,
-  LoginRoute: LoginRoute,
+  NoAuthRouteRoute: NoAuthRouteRouteWithChildren,
+  RequireAuthRouteRoute: RequireAuthRouteRouteWithChildren,
+  MaybeAuthIndexRoute: MaybeAuthIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -115,19 +202,40 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/app",
-        "/login"
+        "/_no-auth",
+        "/_require-auth",
+        "/_maybe-auth/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_no-auth": {
+      "filePath": "_no-auth/route.tsx",
+      "children": [
+        "/_no-auth/sign-in/"
+      ]
     },
-    "/app": {
-      "filePath": "app.tsx"
+    "/_require-auth": {
+      "filePath": "_require-auth/route.tsx",
+      "children": [
+        "/_require-auth/app"
+      ]
     },
-    "/login": {
-      "filePath": "login.tsx"
+    "/_require-auth/app": {
+      "filePath": "_require-auth/app/route.tsx",
+      "parent": "/_require-auth",
+      "children": [
+        "/_require-auth/app/"
+      ]
+    },
+    "/_maybe-auth/": {
+      "filePath": "_maybe-auth/index.tsx"
+    },
+    "/_no-auth/sign-in/": {
+      "filePath": "_no-auth/sign-in/index.tsx",
+      "parent": "/_no-auth"
+    },
+    "/_require-auth/app/": {
+      "filePath": "_require-auth/app/index.tsx",
+      "parent": "/_require-auth/app"
     }
   }
 }

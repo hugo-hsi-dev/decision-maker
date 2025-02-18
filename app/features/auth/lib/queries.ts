@@ -1,8 +1,14 @@
-import { requireAuth } from '@/features/auth/lib/middlewares';
+import { noAuth, requireAuth } from '@/features/auth/lib/middlewares';
 import { queryOptions } from '@tanstack/react-query';
 import { createServerFn, useServerFn } from '@tanstack/start';
 
-const getAuth = createServerFn({ method: 'GET' })
+export const ensureNoAuth = createServerFn({ method: 'GET' })
+	.middleware([noAuth])
+	.handler(() => {
+		return null;
+	});
+
+export const getRequireAuth = createServerFn({ method: 'GET' })
 	.middleware([requireAuth])
 	.handler(async ({ context }) => {
 		return context.user;
@@ -10,15 +16,15 @@ const getAuth = createServerFn({ method: 'GET' })
 
 export const authQueries = {
 	all: () => ['auth'] as const,
-	detail: () =>
+	required: () =>
 		queryOptions({
-			queryKey: [...authQueries.all(), 'detail'],
-			queryFn: () => getAuth(),
+			queryKey: [...authQueries.all(), 'require'],
+			queryFn: () => getRequireAuth(),
 		}),
-	useDetail: () => {
-		const serverFn = useServerFn(getAuth);
+	useRequired: () => {
+		const serverFn = useServerFn(getRequireAuth);
 		return queryOptions({
-			queryKey: [...authQueries.all(), 'detail'],
+			queryKey: [...authQueries.all(), 'require'],
 			queryFn: () => serverFn(),
 		});
 	},

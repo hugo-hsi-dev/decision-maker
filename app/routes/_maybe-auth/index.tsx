@@ -1,7 +1,7 @@
 import User from '@/features/auth/components/user';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_maybe-auth/')({
 	component: Home,
 });
 

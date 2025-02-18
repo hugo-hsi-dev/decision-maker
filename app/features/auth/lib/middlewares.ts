@@ -21,7 +21,7 @@ export const requireAuth = createMiddleware()
 	.middleware([maybeAuth])
 	.server(({ context, next }) => {
 		if (!context.user) {
-			throw redirect({ to: '/login' });
+			throw redirect({ to: '/sign-in' });
 		}
 		return next({ context: { user: context.user } });
 	});
